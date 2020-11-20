@@ -1,7 +1,118 @@
 ﻿{
   "DataContractVersion": "1.1",
-  "DocumentTypes": [],
-  "Groups": [],
+  "DocumentTypes": [
+    {
+      "DocumentTypeId": "Toll.PayByPlate.paybyplatetoll",
+      "Group": "Toll",
+      "Category": "PayByPlate",
+      "Name": "paybyplatetoll",
+      "OptionalUniqueIdentifier": null,
+      "TypeField": {
+        "FieldId": "Toll.PayByPlate.paybyplatetoll.DocumentType",
+        "FieldName": "Document Type"
+      },
+      "Fields": [
+        {
+          "FieldId": "Toll.PayByPlate.paybyplatetoll.LP",
+          "FieldName": "LP",
+          "IsMultiValue": false,
+          "Type": "Text",
+          "DeriveFieldsFormat": "",
+          "Components": [],
+          "SetValues": [],
+          "Metadata": [
+            {
+              "Key": "RequiresReference",
+              "Value": "true"
+            }
+          ]
+        },
+        {
+          "FieldId": "Toll.PayByPlate.paybyplatetoll.State",
+          "FieldName": "State",
+          "IsMultiValue": false,
+          "Type": "Text",
+          "DeriveFieldsFormat": "",
+          "Components": [],
+          "SetValues": [],
+          "Metadata": [
+            {
+              "Key": "RequiresReference",
+              "Value": "true"
+            }
+          ]
+        },
+        {
+          "FieldId": "Toll.PayByPlate.paybyplatetoll.InvoiceNo",
+          "FieldName": "InvoiceNo",
+          "IsMultiValue": false,
+          "Type": "Text",
+          "DeriveFieldsFormat": "",
+          "Components": [],
+          "SetValues": [],
+          "Metadata": [
+            {
+              "Key": "RequiresReference",
+              "Value": "true"
+            }
+          ]
+        },
+        {
+          "FieldId": "Toll.PayByPlate.paybyplatetoll.InvoiceDate",
+          "FieldName": "InvoiceDate",
+          "IsMultiValue": false,
+          "Type": "Text",
+          "DeriveFieldsFormat": "",
+          "Components": [],
+          "SetValues": [],
+          "Metadata": [
+            {
+              "Key": "RequiresReference",
+              "Value": "true"
+            }
+          ]
+        },
+        {
+          "FieldId": "Toll.PayByPlate.paybyplatetoll.BalanceDue",
+          "FieldName": "BalanceDue",
+          "IsMultiValue": false,
+          "Type": "Number",
+          "DeriveFieldsFormat": "",
+          "Components": [],
+          "SetValues": [],
+          "Metadata": [
+            {
+              "Key": "RequiresReference",
+              "Value": "true"
+            }
+          ]
+        },
+        {
+          "FieldId": "Toll.PayByPlate.paybyplatetoll.DueDate",
+          "FieldName": "DueDate",
+          "IsMultiValue": false,
+          "Type": "Text",
+          "DeriveFieldsFormat": "",
+          "Components": [],
+          "SetValues": [],
+          "Metadata": [
+            {
+              "Key": "RequiresReference",
+              "Value": "true"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "Groups": [
+    {
+      "Name": "Toll",
+      "Categories": [
+        "PayByPlate"
+      ]
+    }
+  ],
   "SupportedLanguages": [
     {
       "Name": "Undetermined Language",

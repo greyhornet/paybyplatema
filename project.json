@@ -1,5 +1,5 @@
 {
-  "name": "PlateByPlateMA demo",
+  "name": "PayByPlateMA demo",
   "description": "Process scans from PLATE BY PLATE MA",
   "main": "Main.xaml",
   "dependencies": {

@@ -1,6 +1,15 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="ReadToll" mva:VisualBasic.Settings="{x:Null}" sap:VirtualizedContainerService.HintSize="1162,1006" sap2010:WorkflowViewState.IdRef="ReadToll_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:p="http://schemas.uipath.com/workflow/activities/intelligentocr" xmlns:p1="http://schemas.uipath.com/workflow/activities/intelligentocr/classification" xmlns:p2="http://schemas.uipath.com/workflow/activities/document-processing-contracts/classification" xmlns:p3="http://schemas.uipath.com/workflow/activities/document-processing-contracts/dom" xmlns:p4="http://schemas.uipath.com/workflow/activities/intelligentocr/extraction" xmlns:p5="http://schemas.uipath.com/workflow/activities/document-processing-contracts/extraction" xmlns:p6="http://schemas.uipath.com/workflow/activities/document-processing-contracts/results" xmlns:p7="http://schemas.uipath.com/workflow/activities/intelligentocr/training" xmlns:p8="http://schemas.uipath.com/workflow/activities/document-processing-contracts/taxonomy" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Drawing;assembly=System.Drawing" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="ReadToll" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:p="http://schemas.uipath.com/workflow/activities/intelligentocr" xmlns:p1="http://schemas.uipath.com/workflow/activities/intelligentocr/classification" xmlns:p2="http://schemas.uipath.com/workflow/activities/document-processing-contracts/classification" xmlns:p3="http://schemas.uipath.com/workflow/activities/document-processing-contracts/dom" xmlns:p4="http://schemas.uipath.com/workflow/activities/intelligentocr/extraction" xmlns:p5="http://schemas.uipath.com/workflow/activities/document-processing-contracts/extraction" xmlns:p6="http://schemas.uipath.com/workflow/activities/document-processing-contracts/results" xmlns:p7="http://schemas.uipath.com/workflow/activities/intelligentocr/training" xmlns:p8="http://schemas.uipath.com/workflow/activities/document-processing-contracts/taxonomy" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:sd1="clr-namespace:System.Drawing;assembly=System.Drawing" xmlns:uoa="clr-namespace:UiPath.OmniPage.Activities;assembly=UiPath.OmniPage.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="TollFilePath" Type="InOutArgument(x:String)" />
+    <x:Property Name="Output_data" Type="OutArgument(sd:DataTable)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>1162,1006</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ReadToll_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
-    <scg:List x:TypeArguments="x:String" Capacity="40">
+    <scg:List x:TypeArguments="x:String" Capacity="46">
       <x:String>System.Activities</x:String>
       <x:String>System.Activities.Statements</x:String>
       <x:String>System.Activities.Expressions</x:String>
@@ -41,10 +50,16 @@
       <x:String>UiPath.IntelligentOCR.Activities.Training</x:String>
       <x:String>System.ComponentModel</x:String>
       <x:String>System.Xml.Serialization</x:String>
+      <x:String>UiPath.Vision.OCR</x:String>
+      <x:String>UiPath.OCR.Contracts</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Runtime.InteropServices</x:String>
+      <x:String>UiPath.OmniPage.Activities</x:String>
+      <x:String>UiPath.OCR.Contracts.Activities</x:String>
     </scg:List>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
-    <scg:List x:TypeArguments="AssemblyReference" Capacity="25">
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="27">
       <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
@@ -70,18 +85,31 @@
       <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
       <AssemblyReference>UiPath.DocumentUnderstanding.ML.Activities</AssemblyReference>
       <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>UiPath.Vision.Core</AssemblyReference>
+      <AssemblyReference>UiPath.OCR.Contracts</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="ReadToll" sap:VirtualizedContainerService.HintSize="242,801" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="ReadToll" sap:VirtualizedContainerService.HintSize="304,901" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="p8:DocumentTaxonomy" Name="taxonomy" />
+      <Variable x:TypeArguments="x:String" Name="digitized_text" />
+      <Variable x:TypeArguments="p3:Document" Name="DOM" />
+      <Variable x:TypeArguments="p6:ClassificationResult[]" Name="classification_reslt" />
+      <Variable x:TypeArguments="p6:ExtractionResult" Name="extraction_reslt" />
+      <Variable x:TypeArguments="x:String" Name="key">
+        <Variable.Default>
+          <Literal x:TypeArguments="x:String">GcQUoPE2A+2CZvUwRKLMJyN9tS0mzh4PgOqbF7B+VBUwKCvDX+Utglp9IbD+CPt7HBp7lMq1wVQUcRRxN9GP3A==</Literal>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="p6:ExtractionResult" Name="validated_reslt" />
+      <Variable x:TypeArguments="sd:DataSet" Name="confirmed_data" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <p:LoadTaxonomy DisplayName="Load Taxonomy" sap:VirtualizedContainerService.HintSize="200,67" sap2010:WorkflowViewState.IdRef="LoadTaxonomy_1" Taxonomy="[taxonomy]">
+    <p:LoadTaxonomy DisplayName="Load Taxonomy" sap:VirtualizedContainerService.HintSize="262,67" sap2010:WorkflowViewState.IdRef="LoadTaxonomy_1" Taxonomy="[taxonomy]">
       <sap:WorkflowViewStateService.ViewState>
         <scg:Dictionary x:TypeArguments="x:String, x:Object">
           <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -89,12 +117,13 @@
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
     </p:LoadTaxonomy>
-    <p:DigitizeDocument DocumentObjectModel="{x:Null}" DocumentPath="{x:Null}" DocumentText="{x:Null}" DegreeOfParallelism="-1" DisplayName="Digitize Document" ForceApplyOCR="False" sap:VirtualizedContainerService.HintSize="334,295" sap2010:WorkflowViewState.IdRef="DigitizeDocument_1">
+    <p:DigitizeDocument DegreeOfParallelism="-1" DisplayName="Digitize Document" DocumentObjectModel="[DOM]" DocumentPath="[TollFilePath]" DocumentText="[digitized_text]" ForceApplyOCR="False" sap:VirtualizedContainerService.HintSize="262,67" sap2010:WorkflowViewState.IdRef="DigitizeDocument_1">
       <p:DigitizeDocument.OCREngine>
-        <ActivityFunc x:TypeArguments="sd:Image, scg:IEnumerable(scg:KeyValuePair(sd:Rectangle, x:String))">
+        <ActivityFunc x:TypeArguments="sd1:Image, scg:IEnumerable(scg:KeyValuePair(sd1:Rectangle, x:String))">
           <ActivityFunc.Argument>
-            <DelegateInArgument x:TypeArguments="sd:Image" Name="Image" />
+            <DelegateInArgument x:TypeArguments="sd1:Image" Name="Image" />
           </ActivityFunc.Argument>
+          <uoa:OmniPageOCR Language="{x:Null}" Output="{x:Null}" Scale="{x:Null}" Text="{x:Null}" BundleType="Basic" ComputeSkewAngle="False" DisplayName="OmniPage OCR" ExtractWords="True" sap:VirtualizedContainerService.HintSize="312,22" sap2010:WorkflowViewState.IdRef="OmniPageOCR_1" Image="[Image]" Profile="Scan" />
         </ActivityFunc>
       </p:DigitizeDocument.OCREngine>
       <sap:WorkflowViewStateService.ViewState>
@@ -104,9 +133,9 @@
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
     </p:DigitizeDocument>
-    <p1:ClassifyDocumentScope ClassificationResults="{x:Null}" DocumentObjectModel="{x:Null}" DocumentPath="{x:Null}" DocumentText="{x:Null}" Taxonomy="{x:Null}" DisplayName="Classify Document Scope" sap:VirtualizedContainerService.HintSize="200,67" sap2010:WorkflowViewState.IdRef="ClassifyDocumentScope_1" TaxonomyConfiguration="{}{&quot;TaxonomyMappings&quot;:{},&quot;ClassifierMinimumConfidence&quot;:{},&quot;DocumentTypesByPersistenceId&quot;:{}}">
+    <p1:ClassifyDocumentScope ClassificationResults="[classification_reslt]" DisplayName="Classify Document Scope" DocumentObjectModel="[DOM]" DocumentPath="[TollFilePath]" DocumentText="[digitized_text]" sap:VirtualizedContainerService.HintSize="262,67" sap2010:WorkflowViewState.IdRef="ClassifyDocumentScope_1" Taxonomy="[taxonomy]" TaxonomyConfiguration="{}{&quot;TaxonomyMappings&quot;:{&quot;UIcc54fb39cd7d4303a4f43ad140b446c6&quot;:{&quot;DocumentTypeMappings&quot;:{&quot;Toll.PayByPlate.paybyplatetoll&quot;:{&quot;OriginalDocumentTypeId&quot;:&quot;Toll.PayByPlate.paybyplatetoll&quot;,&quot;ClassifierDocumentTypeId&quot;:null,&quot;IsDocumentTypeIdMapped&quot;:true}}}},&quot;ClassifierMinimumConfidence&quot;:{&quot;UIcc54fb39cd7d4303a4f43ad140b446c6&quot;:&quot;0&quot;},&quot;DocumentTypesByPersistenceId&quot;:{}}">
       <p1:ClassifyDocumentScope.Classifiers>
-        <p1:KeywordBasedClassifier HumanValidatedData="{x:Null}" LearningData="{x:Null}" LearningFilePath="{x:Null}" DisplayName="Keyword Based Classifier" sap:VirtualizedContainerService.HintSize="234,113" sap2010:WorkflowViewState.IdRef="KeywordBasedClassifier_1" PersistenceId="UIcc54fb39cd7d4303a4f43ad140b446c6">
+        <p1:KeywordBasedClassifier HumanValidatedData="{x:Null}" LearningData="{x:Null}" DisplayName="Keyword Based Classifier" sap:VirtualizedContainerService.HintSize="234,113" sap2010:WorkflowViewState.IdRef="KeywordBasedClassifier_1" LearningFilePath="DocumentProcessing\keywordlearning.json" PersistenceId="UIcc54fb39cd7d4303a4f43ad140b446c6">
           <p1:KeywordBasedClassifier.ClassifierResult>
             <OutArgument x:TypeArguments="p2:ClassifierResult">
               <DelegateArgumentReference x:TypeArguments="p2:ClassifierResult">
@@ -151,9 +180,9 @@
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
     </p1:ClassifyDocumentScope>
-    <p4:DataExtractionScope ClassificationResult="{x:Null}" DocumentObjectModel="{x:Null}" DocumentPath="{x:Null}" DocumentText="{x:Null}" DocumentTypeId="{x:Null}" ExtractionResult="{x:Null}" Taxonomy="{x:Null}" DisplayName="Data Extraction Scope" FormatValuesIfPossible="True" sap:VirtualizedContainerService.HintSize="200,67" sap2010:WorkflowViewState.IdRef="DataExtractionScope_1" TaxonomyConfiguration="{}{&quot;TaxonomyMappings&quot;:{},&quot;ExtractorMinimumConfidence&quot;:{},&quot;ExtractorsAliases&quot;:{},&quot;DocumentTypeOptionsByExtractor&quot;:{&quot;UI42c941ed449b430bbe3eb3a771b7e6a4&quot;:[]}}">
+    <p4:DataExtractionScope DocumentTypeId="{x:Null}" ClassificationResult="[classification_reslt(0)]" DisplayName="Data Extraction Scope" DocumentObjectModel="[DOM]" DocumentPath="[TollFilePath]" DocumentText="[digitized_text]" ExtractionResult="[extraction_reslt]" FormatValuesIfPossible="True" sap:VirtualizedContainerService.HintSize="262,67" sap2010:WorkflowViewState.IdRef="DataExtractionScope_1" Taxonomy="[taxonomy]" TaxonomyConfiguration="{}{&quot;TaxonomyMappings&quot;:{&quot;UI42c941ed449b430bbe3eb3a771b7e6a4&quot;:{&quot;DocumentTypeMappings&quot;:{&quot;Toll.PayByPlate.paybyplatetoll&quot;:{&quot;FieldMappings&quot;:{&quot;Toll.PayByPlate.paybyplatetoll.LP&quot;:{&quot;OriginalTaxonomyFieldId&quot;:&quot;Toll.PayByPlate.paybyplatetoll.LP&quot;,&quot;ExtractorTaxonomyFieldId&quot;:null,&quot;ShouldExtract&quot;:true},&quot;Toll.PayByPlate.paybyplatetoll.State&quot;:{&quot;OriginalTaxonomyFieldId&quot;:&quot;Toll.PayByPlate.paybyplatetoll.State&quot;,&quot;ExtractorTaxonomyFieldId&quot;:null,&quot;ShouldExtract&quot;:true},&quot;Toll.PayByPlate.paybyplatetoll.InvoiceNo&quot;:{&quot;OriginalTaxonomyFieldId&quot;:&quot;Toll.PayByPlate.paybyplatetoll.InvoiceNo&quot;,&quot;ExtractorTaxonomyFieldId&quot;:null,&quot;ShouldExtract&quot;:true},&quot;Toll.PayByPlate.paybyplatetoll.InvoiceDate&quot;:{&quot;OriginalTaxonomyFieldId&quot;:&quot;Toll.PayByPlate.paybyplatetoll.InvoiceDate&quot;,&quot;ExtractorTaxonomyFieldId&quot;:null,&quot;ShouldExtract&quot;:true},&quot;Toll.PayByPlate.paybyplatetoll.BalanceDue&quot;:{&quot;OriginalTaxonomyFieldId&quot;:&quot;Toll.PayByPlate.paybyplatetoll.BalanceDue&quot;,&quot;ExtractorTaxonomyFieldId&quot;:null,&quot;ShouldExtract&quot;:true},&quot;Toll.PayByPlate.paybyplatetoll.DueDate&quot;:{&quot;OriginalTaxonomyFieldId&quot;:&quot;Toll.PayByPlate.paybyplatetoll.DueDate&quot;,&quot;ExtractorTaxonomyFieldId&quot;:null,&quot;ShouldExtract&quot;:true}},&quot;ExtractorDocumentTypeId&quot;:null}}}},&quot;ExtractorMinimumConfidence&quot;:{&quot;UI42c941ed449b430bbe3eb3a771b7e6a4&quot;:&quot;0&quot;},&quot;ExtractorsAliases&quot;:{},&quot;DocumentTypeOptionsByExtractor&quot;:{&quot;UI42c941ed449b430bbe3eb3a771b7e6a4&quot;:[]}}">
       <p4:DataExtractionScope.Extractors>
-        <p4:FormExtractor ApiKey="{x:Null}" SerializedSignatureFields="{x:Null}" DisplayName="Form Extractor" Endpoint="https://du.uipath.com/svc/formextractor" sap:VirtualizedContainerService.HintSize="234,161" sap2010:WorkflowViewState.IdRef="FormExtractor_1" MinOverlapPercentage="65" PersistenceId="UI42c941ed449b430bbe3eb3a771b7e6a4" SerializedSettings="{}{}" SerializedTemplates="[]">
+        <p4:FormExtractor SerializedSignatureFields="{x:Null}" ApiKey="[key]" DisplayName="Form Extractor" Endpoint="https://du.uipath.com/svc/formextractor" sap:VirtualizedContainerService.HintSize="234,161" sap2010:WorkflowViewState.IdRef="FormExtractor_1" MinOverlapPercentage="65" PersistenceId="UI42c941ed449b430bbe3eb3a771b7e6a4" SerializedSettings="{}{}" SerializedTemplates="[{&quot;DocumentTypeId&quot;:&quot;Toll.PayByPlate.paybyplatetoll&quot;,&quot;FormId&quot;:&quot;334cddc8&quot;,&quot;FormName&quot;:&quot;paybyplatetemp&quot;,&quot;OriginalFileExtension&quot;:&quot;pdf&quot;,&quot;Pages&quot;:[{&quot;Page&quot;:0,&quot;Size&quot;:[0.0,0.0,609.0,532.0],&quot;SkewAngle&quot;:0.0,&quot;Evidence&quot;:[{&quot;Text&quot;:&quot;Notice&quot;,&quot;Box&quot;:[49.9125,144.9314,49.1904,10.3185]},{&quot;Text&quot;:&quot;of&quot;,&quot;Box&quot;:[49.4326,199.4007,14.8771,10.7984]},{&quot;Text&quot;:&quot;Liability&quot;,&quot;Box&quot;:[49.4326,219.3168,60.468,13.1979]},{&quot;Text&quot;:&quot;Invoice&quot;,&quot;Box&quot;:[49.4326,285.0638,54.9492,10.5584]},{&quot;Text&quot;:&quot;-&quot;,&quot;Box&quot;:[54.7118,345.052,4.3191,2.1597]},{&quot;Text&quot;:&quot;Collections&quot;,&quot;Box&quot;:[49.1926,354.6501,85.4232,10.5584]}],&quot;Fields&quot;:[{&quot;Field&quot;:&quot;Toll.PayByPlate.paybyplatetoll.LP&quot;,&quot;Box&quot;:[135.2783,386.5094,64.4182,10.9015]},{&quot;Field&quot;:&quot;Toll.PayByPlate.paybyplatetoll.State&quot;,&quot;Box&quot;:[144.6932,408.808,38.1554,11.8926]},{&quot;Field&quot;:&quot;Toll.PayByPlate.paybyplatetoll.InvoiceNo&quot;,&quot;Box&quot;:[154.6037,393.4467,60.454,11.3971]},{&quot;Field&quot;:&quot;Toll.PayByPlate.paybyplatetoll.InvoiceDate&quot;,&quot;Box&quot;:[134.2872,507.4174,53.0212,12.3881]},{&quot;Field&quot;:&quot;Toll.PayByPlate.paybyplatetoll.BalanceDue&quot;,&quot;Box&quot;:[216.0488,493.0472,42.6151,27.2539]},{&quot;Field&quot;:&quot;Toll.PayByPlate.paybyplatetoll.DueDate&quot;,&quot;Box&quot;:[216.5443,536.6534,48.0659,27.2539]}],&quot;Tables&quot;:[]}]}]">
           <p4:FormExtractor.DocumentBounds>
             <InArgument x:TypeArguments="p6:ResultsDocumentBounds">
               <DelegateArgumentValue x:TypeArguments="p6:ResultsDocumentBounds">
@@ -205,7 +234,7 @@
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
     </p4:DataExtractionScope>
-    <p:PresentValidationStation AutomaticExtractionResults="{x:Null}" DocumentObjectModel="{x:Null}" DocumentPath="{x:Null}" DocumentText="{x:Null}" Taxonomy="{x:Null}" ValidatedExtractionResults="{x:Null}" DisplayName="Present Validation Station" sap:VirtualizedContainerService.HintSize="200,67" sap2010:WorkflowViewState.IdRef="PresentValidationStation_1">
+    <p:PresentValidationStation AutomaticExtractionResults="[extraction_reslt]" DisplayName="Present Validation Station" DocumentObjectModel="[DOM]" DocumentPath="[TollFilePath]" DocumentText="[digitized_text]" sap:VirtualizedContainerService.HintSize="262,67" sap2010:WorkflowViewState.IdRef="PresentValidationStation_1" Taxonomy="[taxonomy]" ValidatedExtractionResults="[validated_reslt]">
       <sap:WorkflowViewStateService.ViewState>
         <scg:Dictionary x:TypeArguments="x:String, x:Object">
           <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -213,9 +242,9 @@
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
     </p:PresentValidationStation>
-    <p7:TrainClassifiersScope DocumentObjectModel="{x:Null}" DocumentPath="{x:Null}" DocumentText="{x:Null}" HumanValidatedClassificationData="{x:Null}" HumanValidatedData="{x:Null}" Taxonomy="{x:Null}" DisplayName="Train Classifiers Scope" sap:VirtualizedContainerService.HintSize="200,67" sap2010:WorkflowViewState.IdRef="TrainClassifiersScope_1" TaxonomyConfiguration="{}{&quot;TaxonomyMappings&quot;:{},&quot;ClassifierMinimumConfidence&quot;:{},&quot;DocumentTypesByPersistenceId&quot;:{&quot;UI2375fdd9de5a47908c62a773f85cde90&quot;:[]}}">
+    <p7:TrainClassifiersScope HumanValidatedClassificationData="{x:Null}" DisplayName="Train Classifiers Scope" DocumentObjectModel="[DOM]" DocumentPath="[TollFilePath]" DocumentText="[digitized_text]" sap:VirtualizedContainerService.HintSize="262,67" HumanValidatedData="[validated_reslt]" sap2010:WorkflowViewState.IdRef="TrainClassifiersScope_1" Taxonomy="[taxonomy]" TaxonomyConfiguration="{}{&quot;TaxonomyMappings&quot;:{&quot;UI2375fdd9de5a47908c62a773f85cde90&quot;:{&quot;DocumentTypeMappings&quot;:{&quot;Toll.PayByPlate.paybyplatetoll&quot;:{&quot;OriginalDocumentTypeId&quot;:&quot;Toll.PayByPlate.paybyplatetoll&quot;,&quot;ClassifierDocumentTypeId&quot;:null,&quot;IsDocumentTypeIdMapped&quot;:true}}}},&quot;ClassifierMinimumConfidence&quot;:{&quot;UI2375fdd9de5a47908c62a773f85cde90&quot;:&quot;0&quot;},&quot;DocumentTypesByPersistenceId&quot;:{&quot;UI2375fdd9de5a47908c62a773f85cde90&quot;:[]}}">
       <p7:TrainClassifiersScope.Trainables>
-        <p7:KeywordBasedClassifierTrainer LearningData="{x:Null}" LearningFilePath="{x:Null}" DisplayName="Keyword Based Classifier Trainer" sap:VirtualizedContainerService.HintSize="234,113" sap2010:WorkflowViewState.IdRef="KeywordBasedClassifierTrainer_1" PersistenceId="UI2375fdd9de5a47908c62a773f85cde90">
+        <p7:KeywordBasedClassifierTrainer LearningData="{x:Null}" DisplayName="Keyword Based Classifier Trainer" sap:VirtualizedContainerService.HintSize="234,113" sap2010:WorkflowViewState.IdRef="KeywordBasedClassifierTrainer_1" LearningFilePath="DocumentProcessing\keywordlearning.json" PersistenceId="UI2375fdd9de5a47908c62a773f85cde90">
           <p7:KeywordBasedClassifierTrainer.DocumentObjectModel>
             <InArgument x:TypeArguments="p3:Document">
               <DelegateArgumentValue x:TypeArguments="p3:Document">
@@ -253,7 +282,7 @@
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
     </p7:TrainClassifiersScope>
-    <p4:ExportExtractionResults DataSet="{x:Null}" ExtractionResult="{x:Null}" DisplayName="Export Extraction Results" sap:VirtualizedContainerService.HintSize="200,67" sap2010:WorkflowViewState.IdRef="ExportExtractionResults_1" IncludeConfidence="False">
+    <p4:ExportExtractionResults DataSet="[confirmed_data]" DisplayName="Export Extraction Results" ExtractionResult="[extraction_reslt]" sap:VirtualizedContainerService.HintSize="262,67" sap2010:WorkflowViewState.IdRef="ExportExtractionResults_1" IncludeConfidence="False">
       <sap:WorkflowViewStateService.ViewState>
         <scg:Dictionary x:TypeArguments="x:String, x:Object">
           <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -261,5 +290,13 @@
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
     </p4:ExportExtractionResults>
+    <Assign sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="sd:DataTable">[Output_data]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="sd:DataTable">[confirmed_data.Tables(0)]</InArgument>
+      </Assign.Value>
+    </Assign>
   </Sequence>
 </Activity>
